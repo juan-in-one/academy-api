@@ -1,0 +1,26 @@
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+# E, F: pycodestyle + Pyflakes — lo básico (imports/variables sin usar,
+#       espaciado, errores obvios).
+# I: isort — orden automático de imports (estándar, terceros, propio código).
+# B: flake8-bugbear — errores sutiles más allá del estilo (ej. valores por
+#    defecto mutables en funciones, comparar con `== None` en vez de `is None`).
+select = ["E", "F", "I", "B"]
+# B008: Ruff avisa de "no llames a una función en un valor por defecto",
+# pero es justo el patrón oficial de FastAPI para inyección de dependencias
+# (`db: AsyncSession = Depends(get_db)`) — FastAPI la re-evalúa en cada
+# petición, no es el bug que la regla asume en Python normal. Desactivada
+# a propósito, no un descuido.
+ignore = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# La app es async de punta a punta (SQLAlchemy async, FastAPI async def) —
+# "auto" hace que cada "async def test_..." se ejecute como test sin tener
+# que ponerle @pytest.mark.asyncio encima a cada uno, uno por uno.
+asyncio_mode = "auto"
+# Sin esto, pytest no encuentra el paquete "app" al hacer
+# "from app.main import app" dentro de conftest.py.
+pythonpath = ["."]

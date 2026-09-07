@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    permissions:
+      contents: read
+      packages: write
+    uses: juan-in-one/.github/.github/workflows/fastapi-service-ci.yml@main
+    with:
+      service_name: academy_api

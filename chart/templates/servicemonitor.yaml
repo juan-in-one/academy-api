@@ -1,0 +1,19 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "academy-api.fullname" . }}
+  labels:
+    {{- include "academy-api.labels" . | nindent 4 }}
+    # Obligatorio: el Prometheus del clúster (gitops/platform/monitoring)
+    # solo hace caso a los ServiceMonitor con esta etiqueta exacta
+    # (serviceMonitorSelector.matchLabels).
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      {{- include "academy-api.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      path: /metrics
+{{- end }}

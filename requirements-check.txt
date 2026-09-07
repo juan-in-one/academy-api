@@ -1,0 +1,12 @@
+-r requirements.txt #Necesario para los test unitarios
+
+# Herramientas de lint/test — solo para desarrollo y CI, nunca se instalan
+# en la imagen Docker de producción (el Dockerfile solo usa requirements.txt).
+ruff==0.16.6
+
+# Tests unitarios: pytest-asyncio permite escribir tests "async def" (la app
+# es async de punta a punta); httpx es el cliente que llama a la app de
+# FastAPI directamente en memoria, sin arrancar un servidor real.
+pytest==9.1.1
+pytest-asyncio==1.4.0
+httpx==0.28.1
