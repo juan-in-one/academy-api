@@ -8,6 +8,23 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# perl-base viene en la imagen base "slim" mismo, sin que la app lo use para
+# nada (es Python puro) — Debian lo marca "essential" así que hay que forzar
+# el borrado con --allow-remove-essential. Elimina de raíz 3 CVEs CRITICAL de
+# Debian sin parche disponible (perl-base) en vez de dejarlas ahí para
+# siempre: verificado que la imagen sigue arrancando y sirviendo tráfico
+# igual sin él.
+# DS-0017 exige que "update" vaya seguido de "install" en el mismo RUN (para
+# evitar instalar versiones desincronizadas) pero aquí no se instala nada
+# nuevo, solo se elimina un paquete: no aplica el riesgo que la regla
+# intenta prevenir. La etiqueta de ignore tiene que ser el último comentario
+# pegado al RUN, si no Trivy no la reconoce.
+# trivy:ignore:DS-0017
+RUN apt-get update \
+    && apt-get remove --purge -y --allow-remove-essential perl-base \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY app ./app
 
 # Usuario sin privilegios (UID/GID 10001, coincide a propósito con el
