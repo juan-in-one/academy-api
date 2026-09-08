@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write # necesario para la firma keyless de Cosign (ver el workflow reutilizable)
     uses: juan-in-one/.github/.github/workflows/fastapi-service-ci.yml@main
     with:
       service_name: academy_api
