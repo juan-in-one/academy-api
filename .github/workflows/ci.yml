@@ -15,3 +15,12 @@ jobs:
     uses: juan-in-one/.github/.github/workflows/fastapi-service-ci.yml@main
     with:
       service_name: academy_api
+
+  pr-checks:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: juan-in-one/.github/.github/workflows/pr-checks.yml@main
+    with:
+      service_name: academy_api
