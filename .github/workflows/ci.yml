@@ -8,6 +8,10 @@ on:
 
 jobs:
   ci:
+    # Solo al fusionar a main — la CD de verdad (build, escaneos, firma,
+    # SBOM, publicar). Lo que hay que validar antes de fusionar vive en
+    # pr-checks, más abajo, que nunca puede publicar nada.
+    if: github.event_name == 'push'
     permissions:
       contents: read
       packages: write
