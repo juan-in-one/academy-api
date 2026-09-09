@@ -24,3 +24,9 @@ asyncio_mode = "auto"
 # Sin esto, pytest no encuentra el paquete "app" al hacer
 # "from app.main import app" dentro de conftest.py.
 pythonpath = ["."]
+
+[tool.coverage.run]
+# La Action que comenta la cobertura en la PR necesita rutas relativas en
+# el informe (".coverage"), no absolutas — sin esto falla al leerlo,
+# aunque pytest --cov haya ido bien.
+relative_files = true
