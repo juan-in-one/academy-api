@@ -19,7 +19,7 @@ jobs:
   pr-checks:
     if: github.event_name == 'pull_request'
     permissions:
-      contents: read
+      contents: write # python-coverage-comment-action guarda historico en una rama propia
       pull-requests: write
     uses: juan-in-one/.github/.github/workflows/pr-checks.yml@main
     with:
