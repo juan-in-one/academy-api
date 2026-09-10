@@ -4,11 +4,9 @@ Microservicio de la plataforma [juan-in-one](https://github.com/juan-in-one) —
 (conseguidas y objetivo) y seguimiento diario de objetivos de aprendizaje (ej. inglés, tiempo dedicado a
 proyectos personales).
 
-Parte del stack de aprendizaje DevOps/DevSecOps/GitOps: Kubernetes + Helm + GitHub Actions (CI) + ArgoCD (CD)
-sobre un clúster local en OrbStack. Observabilidad completa (métricas, logs, trazas) vía OpenTelemetry +
-Prometheus/Loki/Tempo — mismo patrón que el resto de microservicios de la plataforma.
-
-Stack: Python + FastAPI + SQLAlchemy (async) + Postgres
+Stack: Python + FastAPI + SQLAlchemy (async) + PostgreSQL. Tercer microservicio de la plataforma, réplica
+del mismo patrón que `car-api`/`sport-api` (Docker, Helm, CI/CD, observabilidad) desde el primer commit —
+sin retrofit por fases, a diferencia de los dos primeros.
 
 ## Desarrollo local
 
@@ -42,6 +40,11 @@ pytest --cov=app
 - **`Goal`**: un objetivo diario configurable (nombre + minutos objetivo), ej. "Inglés" → 30 min/día.
 - **`GoalCheckIn`**: registro diario de minutos dedicados a un objetivo — la ausencia de check-in para un día
   es justo lo que distingue "no lo he marcado" de "lo marqué pero no llegué al tiempo".
+
+La razón de separar `Goal` y `GoalCheckIn` en dos tablas, en vez de guardar solo un contador de minutos por
+día: un objetivo sin ningún check-in ese día y un objetivo marcado con 0 minutos son dos hechos distintos
+("no lo intenté" frente a "lo intenté y no llegué") — con un único número no habría forma de distinguirlos
+después. `GET /goals/{id}/today` existe justo para responder a esa pregunta de un vistazo.
 
 ## CI/CD
 
